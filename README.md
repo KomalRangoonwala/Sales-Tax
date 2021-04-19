@@ -1,5 +1,5 @@
 # Sales-Tax
-A block of code that calculates the sales tax on goods purchased
+A C# program to calculate the sales tax on goods purchased
 
 **How to execute?**
 Copy this code in your IDE or use an online IDE like https://dotnetfiddle.net/ and execute.
