@@ -220,6 +220,6 @@ public class Program
 			intTotalTax += intRegularTax;
 		
 		return intTotalTax;
-    }
+	}
 	#endregion
 }
