@@ -109,7 +109,7 @@ public class Program
 	{
 		try
 		{
-			Console.WriteLine("Do you want to test fixed input or user input? Enter 1 for fixed system input, 2 for system input:");
+			Console.WriteLine("Do you want to test fixed input or user input? Enter 1 for fixed system input, 2 for user input:");
 			int intInputType = Convert.ToInt32(Console.ReadLine());
 			if(intInputType != 1 && intInputType != 2)
 				throw new Exception("Invalid input! Please enter either 1 or 2.");
