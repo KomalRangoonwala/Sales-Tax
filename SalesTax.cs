@@ -7,7 +7,7 @@ using System.Collections.Generic;
 // ---------------------------------------------------
 
 // A structure to hold and manage the data
-public class Program
+public class SalesTax
 {
 	public enum ProductCategory
 	{
@@ -179,8 +179,8 @@ public class Program
 		public void Print()
 		{
 			Console.WriteLine("\nYour invoice:\n");
-			foreach(Product objProduct in this._invoice)
-				Console.WriteLine(objProduct.Quantity + " " + objProduct.Name + " at " + objProduct.Price);
+			foreach(Product product in this._invoice)
+				Console.WriteLine(product.Quantity + " " + product.Name + " at " + product.Price);
 
 			Console.WriteLine("Sales Taxes: " + this._totalTax.ToString("F2") + "\nTotal: " + this._totalAmount.ToString());
 		}
@@ -191,75 +191,75 @@ public class Program
 	// Method to test some fixed inputs as given in the question
 	public static List<Product> GetFixedInput(int TestCase)
 	{
-		List<Product> Products = new List<Product>();
+		List<Product> products = new List<Product>();
 		switch(TestCase)
 		{
 			case 1:
-				Product objProduct1 = new Product("book", 12.49, false, ProductCategory.Books, 1);
-				Products.Add(objProduct1);
+				Product product1 = new Product("book", 12.49, false, ProductCategory.Books, 1);
+				products.Add(product1);
 				
-				Product objProduct2 = new Product("music CD", 14.99, false, ProductCategory.Other, 1);
-				Products.Add(objProduct2);
+				Product product2 = new Product("music CD", 14.99, false, ProductCategory.Other, 1);
+				products.Add(product2);
 				
-				Product objProduct3 = new Product("chocolate bar", 0.85, false, ProductCategory.Food, 1);
-				Products.Add(objProduct3);
+				Product product3 = new Product("chocolate bar", 0.85, false, ProductCategory.Food, 1);
+				products.Add(product3);
 				break;
 				
 			case 2:
-				Product objProduct4 = new Product("imported box of chocolates", 10.00, true, ProductCategory.Food, 1);
-				Products.Add(objProduct4);
+				Product product4 = new Product("imported box of chocolates", 10.00, true, ProductCategory.Food, 1);
+				products.Add(product4);
 				
-				Product objProduct5 = new Product("imported bottle of perfume", 47.50, true, ProductCategory.Other, 1);
-				Products.Add(objProduct5);				
+				Product product5 = new Product("imported bottle of perfume", 47.50, true, ProductCategory.Other, 1);
+				products.Add(product5);				
 				break;
 				
 			case 3:
-				Product objProduct6 = new Product("imported bottle of perfume", 27.99, true, ProductCategory.Other, 1);
-				Products.Add(objProduct6);
+				Product product6 = new Product("imported bottle of perfume", 27.99, true, ProductCategory.Other, 1);
+				products.Add(product6);
 				
-				Product objProduct7 = new Product("bottle of perfume", 18.99, false, ProductCategory.Other, 1);
-				Products.Add(objProduct7);
+				Product product7 = new Product("bottle of perfume", 18.99, false, ProductCategory.Other, 1);
+				products.Add(product7);
 				
-				Product objProduct8 = new Product("packet of headache pills", 9.75, false, ProductCategory.MedicalProducts, 1);
-				Products.Add(objProduct8);
+				Product product8 = new Product("packet of headache pills", 9.75, false, ProductCategory.MedicalProducts, 1);
+				products.Add(product8);
 				
-				Product objProduct9 = new Product("box of imported chocolates", 11.25, true, ProductCategory.Food, 1);
-				Products.Add(objProduct9);
+				Product product9 = new Product("box of imported chocolates", 11.25, true, ProductCategory.Food, 1);
+				products.Add(product9);
 				break;
 		}
 		
-		return Products;
+		return products;
 	}
 	
 	// Method to test user input
 	public static List<Product> GetUserInput()
 	{
 		Console.WriteLine("Enter the number of products: ");
-		int TotalProducts = Convert.ToInt32(Console.ReadLine());
+		int totalProducts = Convert.ToInt32(Console.ReadLine());
 
-		List<Product> Products = new List<Product>();
-		for ( int i = 1; i <= TotalProducts; i++ )
+		List<Product> products = new List<Product>();
+		for ( int i = 1; i <= totalProducts; i++ )
 		{
 			Console.WriteLine("#" + i.ToString() + " Enter product name: ");
-			string strName = Console.ReadLine();
+			string name = Console.ReadLine();
 			
 			Console.WriteLine("#" + i.ToString() + " Enter product price: ");
-			double dblPrice = Convert.ToDouble(Console.ReadLine());
+			double price = Convert.ToDouble(Console.ReadLine());
 			
 			Console.WriteLine("#" + i.ToString() + " Is product imported? [true or false] ");
-			bool blnIsImported = Convert.ToBoolean(Console.ReadLine());
+			bool isImported = Convert.ToBoolean(Console.ReadLine());
 			
 			Console.WriteLine("#" + i.ToString() + " Enter product category [Books = 1, Food = 2, Medical products = 3, Other = 4]: ");
-			ProductCategory eCategory = (ProductCategory) Convert.ToInt32(Console.ReadLine());
+			ProductCategory category = (ProductCategory) Convert.ToInt32(Console.ReadLine());
 			
 			Console.WriteLine("#" + i.ToString() + " Enter product quantity: ");
-			int intQuantity = Convert.ToInt32(Console.ReadLine());
+			int quantity = Convert.ToInt32(Console.ReadLine());
 			
-			Product objProduct = new Product(strName, dblPrice, blnIsImported, eCategory, intQuantity);
-			Products.Add(objProduct);
+			Product product = new Product(name, price, isImported, category, quantity);
+			products.Add(product);
 		}
 		
-		return Products;
+		return products;
 	}
 	#endregion
 		
@@ -270,12 +270,12 @@ public class Program
 		try
 		{
 			Console.WriteLine("Do you want to test fixed input or user input? Enter 1 for fixed system input, 2 for user input:");
-			INPUT_TYPE InputType = (INPUT_TYPE) Convert.ToInt32(Console.ReadLine());
-			if(InputType != INPUT_TYPE.SYSTEM && InputType != INPUT_TYPE.USER)
+			INPUT_TYPE inputType = (INPUT_TYPE) Convert.ToInt32(Console.ReadLine());
+			if(inputType != INPUT_TYPE.SYSTEM && inputType != INPUT_TYPE.USER)
 				throw new Exception("Invalid input! Please enter either 1 or 2.");
 
-			List<Product> lstProducts = new List<Product>();
-			if(InputType == INPUT_TYPE.SYSTEM) // System input
+			List<Product> products = new List<Product>();
+			if(inputType == INPUT_TYPE.SYSTEM) // System input
 			{
 				Console.WriteLine("Which test case do you want to test? 1, 2, or 3?");
 				
@@ -283,15 +283,15 @@ public class Program
 				if(intTestCase < 1 || intTestCase > 3)
 					throw new Exception("Invalid test case! Please enter either 1, 2 or 3.");
 				
-				lstProducts = GetFixedInput(intTestCase);
+				products = GetFixedInput(intTestCase);
 			}
 			else // User input
-				lstProducts = GetUserInput();
+				products = GetUserInput();
 			
-			if(lstProducts.Count <= 0)
+			if(products.Count <= 0)
 				throw new Exception("Product list is empty. System is unable to process the orders and generate the invoice.");
 			
-			Invoice objInvoice = ProcessOrders(lstProducts);
+			Invoice objInvoice = ProcessOrders(products);
 			objInvoice.Print();
 		}
 		catch(Exception ex)
@@ -303,13 +303,13 @@ public class Program
 		
 	#region Core methods
 	// Method to process the actual data
-	public static Invoice ProcessOrders(List<Product> lstProducts)
+	public static Invoice ProcessOrders(List<Product> products)
 	{
 		List<Product> lstInvoice = new List<Product>();
-		double TotalTax = 0;
-		double TotalAmount = 0;
+		double totalTax = 0;
+		double totalAmount = 0;
 		
-		foreach ( Product objProduct in lstProducts )
+		foreach ( Product objProduct in products )
 		{
 			double taxToApply = 0;
 			BaseTax baseTax = new BaseTax(objProduct);
@@ -330,15 +330,15 @@ public class Program
 				taxToApply += calculatedImportTax;
 			}
 			
-			TotalTax += taxToApply;
+			totalTax += taxToApply;
 			double CalculatedPrice = objProduct.TotalPrice + taxToApply;
-			TotalAmount += CalculatedPrice;
+			totalAmount += CalculatedPrice;
 				
 			Product objInvoiceProduct = new Product(objProduct.Name, CalculatedPrice, objProduct.IsImported, objProduct.Category, objProduct.Quantity);
 			lstInvoice.Add(objInvoiceProduct);
 		}
 		
-		return new Invoice(lstInvoice, TotalTax, TotalAmount);
+		return new Invoice(lstInvoice, totalTax, totalAmount);
 	}
 	
 	#endregion
