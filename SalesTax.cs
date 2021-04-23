@@ -306,39 +306,39 @@ public class Program
 	public static Invoice ProcessOrders(List<Product> lstProducts)
 	{
 		List<Product> lstInvoice = new List<Product>();
-		double dblTotalTax = 0;
-		double dblTotalAmount = 0;
+		double TotalTax = 0;
+		double TotalAmount = 0;
 		
 		foreach ( Product objProduct in lstProducts )
 		{
 			double taxToApply = 0;
-			BaseTax bt = new BaseTax(objProduct);
-			double dblBaseTax = bt.Calculate();
-			taxToApply += dblBaseTax;
+			BaseTax baseTax = new BaseTax(objProduct);
+			double calculatedBaseTax = baseTax.Calculate();
+			taxToApply += calculatedBaseTax;
 
 			if ( objProduct.Category == ProductCategory.Other )
 			{
-				RegularTax rt = new RegularTax(objProduct);
-				double dblRegularTax = rt.Calculate();
-				taxToApply += dblRegularTax;
+				RegularTax regularTax = new RegularTax(objProduct);
+				double calculatedRegularTax = regularTax.Calculate();
+				taxToApply += calculatedRegularTax;
 			}
 			
 			if ( objProduct.IsImported )
 			{
-				ImportTax it = new ImportTax(objProduct);
-				double dblImportTax = it.Calculate();
-				taxToApply += dblImportTax;
+				ImportTax importTax = new ImportTax(objProduct);
+				double calculatedImportTax = importTax.Calculate();
+				taxToApply += calculatedImportTax;
 			}
 			
-			dblTotalTax += taxToApply;
-			double dblPrice = objProduct.TotalPrice + taxToApply;
-			dblTotalAmount += dblPrice;
+			TotalTax += taxToApply;
+			double CalculatedPrice = objProduct.TotalPrice + taxToApply;
+			TotalAmount += CalculatedPrice;
 				
-			Product objInvoiceProduct = new Product(objProduct.Name, dblPrice, objProduct.IsImported, objProduct.Category, objProduct.Quantity);
+			Product objInvoiceProduct = new Product(objProduct.Name, CalculatedPrice, objProduct.IsImported, objProduct.Category, objProduct.Quantity);
 			lstInvoice.Add(objInvoiceProduct);
 		}
 		
-		return new Invoice(lstInvoice, dblTotalTax, dblTotalAmount);
+		return new Invoice(lstInvoice, TotalTax, TotalAmount);
 	}
 	
 	#endregion
