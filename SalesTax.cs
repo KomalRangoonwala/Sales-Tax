@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 
-// ---------------------------------------------------
+// ---------------------------------------------------------
 // Author: Komal Rangoonwala for Makkajai Dev Challenge
-// Date: 17 Apr 2021, 21 Apr 2021, 22 Apr 2021, 23 Apr 2021
-// ---------------------------------------------------
+// Date: 17 Apr 2021, 21 Apr 2021, 22 Apr 2021, 23 Apr 2021, 28 Apr 2021
+// ---------------------------------------------------------
 
 // A structure to hold and manage the data
 public class SalesTax
 {
+	#region Enums
 	public enum ProductCategory
 	{
 		Books = 1,
@@ -22,6 +23,7 @@ public class SalesTax
 		SYSTEM = 1,
 		USER = 2,
 	}
+	#endregion
 	
 	public class Product
 	{
@@ -187,6 +189,68 @@ public class SalesTax
 		#endregion
 	}
 	
+	public class ProcessOrders
+	{
+		List<Product> _products;
+		public ProcessOrders(List<Product> products)
+		{
+			this._products = products;
+		}
+		
+		public List<Product> Products
+		{
+			get
+			{
+				return this._products;
+			}
+		}
+		
+		public Invoice Process()
+		{
+			List<Product> lstInvoice = new List<Product>();
+			double totalTax = 0;
+			double totalAmount = 0;
+
+			foreach ( Product objProduct in this._products )
+			{
+				double taxToApply = this.CalculateTax(objProduct);
+
+				totalTax += taxToApply;
+				double CalculatedPrice = objProduct.TotalPrice + taxToApply;
+				totalAmount += CalculatedPrice;
+
+				Product objInvoiceProduct = new Product(objProduct.Name, CalculatedPrice, objProduct.IsImported, objProduct.Category, objProduct.Quantity);
+				lstInvoice.Add(objInvoiceProduct);
+			}
+		
+			return new Invoice(lstInvoice, totalTax, totalAmount);
+		}
+		
+		private double CalculateTax(Product product)
+		{
+			double taxToApply = 0;
+			BaseTax baseTax = new BaseTax(product);
+			double calculatedBaseTax = baseTax.Calculate();
+			taxToApply += calculatedBaseTax;
+
+			if ( product.Category == ProductCategory.Other )
+			{
+				RegularTax regularTax = new RegularTax(product);
+				double calculatedRegularTax = regularTax.Calculate();
+				taxToApply += calculatedRegularTax;
+			}
+
+			if ( product.IsImported )
+			{
+				ImportTax importTax = new ImportTax(product);
+				double calculatedImportTax = importTax.Calculate();
+				taxToApply += calculatedImportTax;
+			}
+			
+			return taxToApply;
+		}
+	}
+	
 	#region Input methods
 	// Method to test some fixed inputs as given in the question
 	public static List<Product> GetFixedInput(int TestCase)
@@ -291,7 +355,8 @@ public class SalesTax
 			if(products.Count <= 0)
 				throw new Exception("Product list is empty. System is unable to process the orders and generate the invoice.");
 			
-			Invoice objInvoice = ProcessOrders(products);
+			ProcessOrders objProcessOrders = new ProcessOrders(products);
+			Invoice objInvoice = objProcessOrders.Process();
 			objInvoice.Print();
 		}
 		catch(Exception ex)
@@ -299,48 +364,6 @@ public class SalesTax
 			Console.WriteLine(ex.Message);
 		}
 	}
-	#endregion
-		
-	#region Core methods
-	// Method to process the actual data
-	public static Invoice ProcessOrders(List<Product> products)
-	{
-		List<Product> lstInvoice = new List<Product>();
-		double totalTax = 0;
-		double totalAmount = 0;
-		
-		foreach ( Product objProduct in products )
-		{
-			double taxToApply = 0;
-			BaseTax baseTax = new BaseTax(objProduct);
-			double calculatedBaseTax = baseTax.Calculate();
-			taxToApply += calculatedBaseTax;
-
-			if ( objProduct.Category == ProductCategory.Other )
-			{
-				RegularTax regularTax = new RegularTax(objProduct);
-				double calculatedRegularTax = regularTax.Calculate();
-				taxToApply += calculatedRegularTax;
-			}
-			
-			if ( objProduct.IsImported )
-			{
-				ImportTax importTax = new ImportTax(objProduct);
-				double calculatedImportTax = importTax.Calculate();
-				taxToApply += calculatedImportTax;
-			}
-			
-			totalTax += taxToApply;
-			double CalculatedPrice = objProduct.TotalPrice + taxToApply;
-			totalAmount += CalculatedPrice;
-				
-			Product objInvoiceProduct = new Product(objProduct.Name, CalculatedPrice, objProduct.IsImported, objProduct.Category, objProduct.Quantity);
-			lstInvoice.Add(objInvoiceProduct);
-		}
-		
-		return new Invoice(lstInvoice, totalTax, totalAmount);
-	}
-	
 	#endregion
 	
 	#region Utility methods
